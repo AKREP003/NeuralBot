@@ -39,7 +39,7 @@ class HitBall(Environment):
 
     def run(self):
 
-        for _ in range(3):
+        for _ in range(10):
 
             agentAction = self.actor.act(self.state)
 
@@ -49,3 +49,5 @@ class HitBall(Environment):
             self.state = torch.add(self.state, normalizeAction(agentAction))
 
             self.actor.logAct(self.state)
+
+        print(self.actor.jacobian.forward(torch.cat((self.state, agentAction))))

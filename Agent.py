@@ -16,6 +16,8 @@ class Action:
     def initState(self):
         return torch.cat((self.prevState, self.action), dim=0)
 
+    def clone(self):
+        return Action(self.prevState.clone(), self.action.clone(), self.nextState.clone())
 
 class Agent:
     def __init__(self, stateD: int, actionD: int ) -> None:
@@ -69,9 +71,6 @@ class Agent:
 
             loss = self.jacobianLoss(predState, out)
 
-            if t % 100 == 99:
-                print(t, loss.item())
-
             self.jacobianOptimizer.zero_grad()
 
             loss.backward()
@@ -84,15 +83,20 @@ class Agent:
 
     def logAct(self, obsState: Tensor) -> None:
 
+        print("obsState")
+        print(obsState)
+
         if not self.memory: return
 
-        self.memory[-1].nextState = obsState.clone()
+        self.memory[-1].nextState = torch.sub(obsState, self.memory[-1].prevState)
 
         self.updateJacobian()
 
         self.memory.append(Action())
 
     def act(self, state: Tensor) -> Tensor:
+
+        if not self.memory: self.memory.append(Action())
 
         self.memory[-1].prevState = state.clone()
         self.memory[-1].action = torch.ones(self.actionD)

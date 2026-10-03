@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7dee1426-300a-4384-9576-8b12149b9a57" name="Changes" comment="init">
+    <list default="true" id="7dee1426-300a-4384-9576-8b12149b9a57" name="Changes" comment="it is learning I guess">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/Agent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Enviroment.py" beforeDir="false" afterPath="$PROJECT_DIR$/Enviroment.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Games/HitBall.py" beforeDir="false" afterPath="$PROJECT_DIR$/Games/HitBall.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -107,11 +106,20 @@
       <option name="project" value="LOCAL" />
       <updated>1791057901091</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="it is learning I guess">
+      <option name="closed" value="true" />
+      <created>1791061304315</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1791061304315</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
-    <option name="LAST_COMMIT_MESSAGE" value="init" />
+    <MESSAGE value="it is learning I guess" />
+    <option name="LAST_COMMIT_MESSAGE" value="it is learning I guess" />
   </component>
 </project>
