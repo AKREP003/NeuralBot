@@ -40,11 +40,47 @@ class Agent:
         self.jacobianOptimizer = torch.optim.RMSprop(self.jacobian.parameters(),
                                                      lr=self.learning_rate)
 
-        self.jacobianTrainIter: int = 200
+        self.jacobianTrainIter: int = 1000
+
+        self.jacobianLoss = torch.nn.MSELoss(reduction='sum')
 
     def judge(self, state: Tensor) -> Tensor:
 
         return torch.sub(state, self.idealState).abs().sum()
+
+    def updateJacobian(self) -> None:
+
+        inp = self.memory[-1].initState()
+
+        print("inp")
+
+        print(inp)
+
+        out = self.memory[-1].nextState
+
+        print("out")
+
+        print(out)
+
+
+        for t in range(self.jacobianTrainIter):
+
+            predState = self.jacobian.forward(inp)
+
+            loss = self.jacobianLoss(predState, out)
+
+            if t % 100 == 99:
+                print(t, loss.item())
+
+            self.jacobianOptimizer.zero_grad()
+
+            loss.backward()
+
+            self.jacobianOptimizer.step()
+
+        print(self.jacobian[0].weight)
+
+
 
     def logAct(self, obsState: Tensor) -> None:
 
@@ -52,8 +88,15 @@ class Agent:
 
         self.memory[-1].nextState = obsState.clone()
 
+        self.updateJacobian()
+
+        self.memory.append(Action())
+
     def act(self, state: Tensor) -> Tensor:
 
-        return torch.ones(self.actionD)
+        self.memory[-1].prevState = state.clone()
+        self.memory[-1].action = torch.ones(self.actionD)
+
+        return self.memory[-1].action
 
 

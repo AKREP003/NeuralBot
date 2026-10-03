@@ -2,7 +2,8 @@
 import torch
 from torch import Tensor
 
-from Enviroment import Enviroment
+from Enviroment import Environment
+
 from Agent import Agent
 
 
@@ -21,11 +22,11 @@ class Timmy(Agent):
 
         super().__init__(1, 1)
 
-class HitBall(Enviroment):
+class HitBall(Environment):
     def __init__(self):
         super().__init__()
 
-        self.state = torch.tensor([0])
+        self.state = torch.tensor([5])
 
         self.actor = Timmy()
 
@@ -38,6 +39,13 @@ class HitBall(Enviroment):
 
     def run(self):
 
-        for _ in range(10):
+        for _ in range(3):
 
-            print(self.actor.act(self.state))
+            agentAction = self.actor.act(self.state)
+
+            print("action")
+            print(agentAction)
+
+            self.state = torch.add(self.state, normalizeAction(agentAction))
+
+            self.actor.logAct(self.state)

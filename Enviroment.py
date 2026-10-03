@@ -2,7 +2,7 @@ import torch
 from torch import Tensor
 
 
-class Enviroment:
+class Environment:
 
     def __init__(self):
 
