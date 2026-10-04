@@ -9,24 +9,28 @@ from Agent import Agent
 
 def normalizeAction(action: Tensor) -> Tensor:
 
-    pushD = action[0]
+    return action
 
-    if pushD > 0:
+    pushD = action[0].item()
+
+    if pushD > 1:
         return torch.tensor([1.0], device=action.device)
-    if pushD < 0:
+    if pushD < -1:
         return torch.tensor([-1.0], device=action.device)
-    return torch.tensor([0.0], device=action.device)
+    return action
 
 class Timmy(Agent):
     def __init__(self):
 
         super().__init__(1, 1)
 
+        self.idealState = torch.tensor([5])
+
 class HitBall(Environment):
     def __init__(self):
         super().__init__()
 
-        self.state = torch.tensor([5])
+        self.state = torch.tensor([1])
 
         self.actor = Timmy()
 
@@ -50,4 +54,4 @@ class HitBall(Environment):
 
             self.actor.logAct(self.state)
 
-        print(self.actor.jacobian.forward(torch.cat((self.state, agentAction))))
+

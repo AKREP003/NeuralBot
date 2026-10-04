@@ -10,7 +10,6 @@ p = torch.tensor([1, 2, 3])
 xx = x.unsqueeze(-1).pow(p)
 
 model = torch.nn.Sequential(
-    torch.nn.Linear(3, 3),
     torch.nn.Linear(3, 1),
     torch.nn.Flatten(0, 1)
 )

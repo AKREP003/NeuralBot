@@ -46,23 +46,18 @@ class Agent:
 
         self.jacobianLoss = torch.nn.MSELoss(reduction='sum')
 
+        self.decideIter: int = 1000
+
+
     def judge(self, state: Tensor) -> Tensor:
 
-        return torch.sub(state, self.idealState).abs().sum()
+        return self.jacobianLoss(state, self.idealState)
 
     def updateJacobian(self) -> None:
 
         inp = self.memory[-1].initState()
 
-        print("inp")
-
-        print(inp)
-
         out = self.memory[-1].nextState
-
-        print("out")
-
-        print(out)
 
 
         for t in range(self.jacobianTrainIter):
@@ -77,10 +72,6 @@ class Agent:
 
             self.jacobianOptimizer.step()
 
-        print(self.jacobian[0].weight)
-
-
-
     def logAct(self, obsState: Tensor) -> None:
 
         print("obsState")
@@ -94,12 +85,43 @@ class Agent:
 
         self.memory.append(Action())
 
+    def decide(self, state: Tensor) -> Tensor:
+
+        actionBuffer = torch.zeros(self.actionD, requires_grad=True)
+
+        opt = torch.optim.RMSprop([actionBuffer], lr=self.learning_rate)
+
+        for _ in range(self.decideIter):
+
+            potential : Action = Action()
+
+            potential.prevState = state.clone()
+
+            potential.action = actionBuffer.clone()
+
+            predChange =  self.jacobian.forward(potential.initState())
+
+            predState = torch.add(state, predChange)
+
+            loss = self.judge(predState)
+
+            opt.zero_grad()
+
+            loss.backward()
+
+            opt.step()
+
+        return actionBuffer
+
     def act(self, state: Tensor) -> Tensor:
 
         if not self.memory: self.memory.append(Action())
 
         self.memory[-1].prevState = state.clone()
-        self.memory[-1].action = torch.ones(self.actionD)
+
+        #self.memory[-1].action = torch.ones(self.actionD)
+
+        self.memory[-1].action = self.decide(state)
 
         return self.memory[-1].action
 
