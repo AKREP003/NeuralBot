@@ -5,19 +5,19 @@ class Action:
     def __init__(self,
                  prevState: Tensor = torch.zeros(0),
                  action: Tensor = torch.zeros(0),
-                 nextState: Tensor = torch.zeros(0)):
+                 stateChange: Tensor = torch.zeros(0)):
 
         self.prevState = prevState
 
         self.action = action
 
-        self.nextState = nextState
+        self.stateChange = stateChange
 
     def initState(self):
         return torch.cat((self.prevState, self.action), dim=0)
 
     def clone(self):
-        return Action(self.prevState.clone(), self.action.clone(), self.nextState.clone())
+        return Action(self.prevState.clone(), self.action.clone(), self.stateChange.clone())
 
 class Agent:
     def __init__(self, stateD: int, actionD: int ) -> None:
@@ -78,7 +78,7 @@ class Agent:
 
             inp = self.memory[index].initState()
 
-            out = self.memory[index].nextState
+            out = self.memory[index].stateChange
 
             self.updateJacobian(inp, out)
 
@@ -111,7 +111,7 @@ class Agent:
 
         if not self.memory: return
 
-        self.memory[-1].nextState = torch.sub(obsState, self.memory[-1].prevState)
+        self.memory[-1].stateChange = torch.sub(obsState, self.memory[-1].prevState)
 
         self.recollection()
 
@@ -129,7 +129,7 @@ class Agent:
 
             potential.prevState = state.clone()
 
-            potential.action = actionBuffer.clone()
+            potential.action = actionBuffer
 
             predChange =  self.jacobian.forward(potential.initState())
 

@@ -11,13 +11,7 @@ def normalizeAction(action: Tensor) -> Tensor:
 
     return action
 
-    pushD = action[0].item()
 
-    if pushD > 1:
-        return torch.tensor([1.0], device=action.device)
-    if pushD < -1:
-        return torch.tensor([-1.0], device=action.device)
-    return action
 
 class Timmy(Agent):
     def __init__(self):
