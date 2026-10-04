@@ -43,7 +43,7 @@ class HitBall(Environment):
 
     def run(self):
 
-        for _ in range(10):
+        for _ in range(100):
 
             agentAction = self.actor.act(self.state)
 

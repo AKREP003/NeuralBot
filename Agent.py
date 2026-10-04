@@ -30,7 +30,7 @@ class Agent:
 
         self.memory.append(Action())
 
-        self.idealState: Tensor = torch.tensor(stateD)
+        self.idealState: Tensor = torch.zeros(stateD)
 
         self.jacobian = torch.nn.Sequential(
             torch.nn.Linear(stateD + actionD,
