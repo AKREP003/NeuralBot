@@ -48,29 +48,61 @@ class Agent:
 
         self.decideIter: int = 1000
 
+        self.pastRecollection: int = 2
+
 
     def judge(self, state: Tensor) -> Tensor:
 
         return self.jacobianLoss(state, self.idealState)
 
-    def updateJacobian(self) -> None:
+    def getMemRange(self):
 
-        inp = self.memory[-1].initState()
-
-        out = self.memory[-1].nextState
+        memSize = len(self.memory)
 
 
-        for t in range(self.jacobianTrainIter):
+        return (max(0, memSize - self.pastRecollection),
+                memSize - 1
+                )
 
-            predState = self.jacobian.forward(inp)
+    def recollection(self) -> None:
 
-            loss = self.jacobianLoss(predState, out)
+        remaining = self.jacobianTrainIter
 
-            self.jacobianOptimizer.zero_grad()
+        memRange = self.getMemRange()
 
-            loss.backward()
+        index = memRange[0]
 
-            self.jacobianOptimizer.step()
+        while remaining > 0:
+
+            if index > memRange[1]: index = memRange[0]
+
+            inp = self.memory[index].initState()
+
+            out = self.memory[index].nextState
+
+            self.updateJacobian(inp, out)
+
+            index += 1
+
+            remaining -= 1
+
+
+
+    def updateJacobian(self, inp:Tensor, out:Tensor) -> None:
+
+        #inp = self.memory[-1].initState()
+
+        #out = self.memory[-1].nextState
+
+        predState = self.jacobian.forward(inp)
+
+        loss = self.jacobianLoss(predState, out)
+
+        self.jacobianOptimizer.zero_grad()
+
+        loss.backward()
+
+        self.jacobianOptimizer.step()
 
     def logAct(self, obsState: Tensor) -> None:
 
@@ -81,7 +113,7 @@ class Agent:
 
         self.memory[-1].nextState = torch.sub(obsState, self.memory[-1].prevState)
 
-        self.updateJacobian()
+        self.recollection()
 
         self.memory.append(Action())
 
