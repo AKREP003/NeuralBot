@@ -34,7 +34,9 @@ class Agent:
 
         self.jacobian = torch.nn.Sequential(
             torch.nn.Linear(stateD + actionD,
-                            stateD)
+                            stateD),
+            torch.nn.Linear(stateD,
+                            stateD),
         )
 
         self.learning_rate = 1e-3
