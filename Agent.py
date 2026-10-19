@@ -1,3 +1,5 @@
+import types
+
 import torch
 from torch import Tensor
 
@@ -17,7 +19,101 @@ class Action:
         return torch.cat((self.prevState, self.action), dim=0)
 
     def clone(self):
-        return Action(self.prevState.clone(), self.action.clone(), self.stateChange.clone())
+        return Action(torch.clone(self.prevState), torch.clone(self.action), torch.clone(self.stateChange))
+
+    def __str__(self):
+
+        return f"{self.prevState.__str__()} + {self.action.__str__()} -> {self.stateChange.__str__()}"
+
+
+class SearchNode:
+    def __init__(
+        self,
+        actionD: int,
+        action: Tensor,
+        delta: float,
+        searchCount: int = 1,
+    ):
+
+        self.actionD = actionD
+
+        self.action = action
+        self.delta = delta
+        self.searchCount = searchCount
+
+    def clone(self):
+        return SearchNode(
+            actionD=self.actionD,
+            action=torch.clone(self.action),
+            delta=self.delta,
+            searchCount=self.searchCount,
+        )
+
+    def getRectVariation(self) -> list[Tensor]:
+        return self.singleDeviation(0)
+
+    def singleDeviation(self, index: int) -> list[Tensor]:
+
+        if index >= self.actionD: return [self.action]
+
+        variations = []
+
+        for dist in range(-self.searchCount, self.searchCount + 1):
+            node = self.clone()
+
+            change = dist * self.delta
+
+            with torch.no_grad():
+                node.action[index] += change
+
+            variations.extend(node.singleDeviation(index + 1))
+
+        return variations
+
+
+
+
+class SearchSpace:
+    def __init__(self,
+                 stateD: int,
+                 actionD: int,
+                 state: Tensor,
+                 delta: int,
+                 pred,
+                 loss,
+                 ):
+
+        self.stateD = stateD
+        self.actionD = actionD
+        self.state = state
+        self.delta = delta
+        self.loss = loss
+        self.pred = pred
+
+    def actionList(self, state: Tensor, action: Tensor) -> list[Action]:
+
+        node: SearchNode = SearchNode(self.actionD, action, self.delta, 1)
+
+        actVecList: list[Tensor] = node.getRectVariation()
+
+        actListBuffer: list[Action] = []
+
+        for act in actVecList:
+
+            actionObj: Action = Action()
+
+            actionObj.action = act
+
+            actionObj.prevState = torch.clone(state)
+
+            initState = actionObj.initState()
+
+            actionObj.stateChange = self.pred(initState)
+
+            actListBuffer.append(actionObj)
+
+        return actListBuffer
+
 
 class Agent:
     def __init__(self, stateD: int, actionD: int ) -> None:
@@ -119,7 +215,20 @@ class Agent:
 
         self.memory.append(Action())
 
+    def changePred(self, initState: Tensor) -> Tensor:
+
+        return self.jacobian.forward(initState)
+
+
     def decide(self, state: Tensor) -> Tensor:
+
+        space: SearchSpace = SearchSpace(self.stateD, self.actionD, state, 1, self.changePred, self.judge)
+
+        for k in space.actionList(state, torch.zeros(self.stateD)):
+
+            print(k)
+
+
 
         actionBuffer = torch.zeros(self.actionD, requires_grad=True)
 
@@ -129,11 +238,11 @@ class Agent:
 
             potential : Action = Action()
 
-            potential.prevState = state.clone()
+            potential.prevState = torch.clone(state)
 
             potential.action = actionBuffer
 
-            predChange =  self.jacobian.forward(potential.initState())
+            predChange = self.changePred(potential.initState())
 
             predState = torch.add(state, predChange)
 
@@ -151,7 +260,7 @@ class Agent:
 
         if not self.memory: self.memory.append(Action())
 
-        self.memory[-1].prevState = state.clone()
+        self.memory[-1].prevState = torch.clone(state)
 
         #self.memory[-1].action = torch.ones(self.actionD)
 

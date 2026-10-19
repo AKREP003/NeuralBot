@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7dee1426-300a-4384-9576-8b12149b9a57" name="Changes" comment="better jacob">
+    <list default="true" id="7dee1426-300a-4384-9576-8b12149b9a57" name="Changes" comment="even smarter">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/Agent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Games/HitBall.py" beforeDir="false" afterPath="$PROJECT_DIR$/Games/HitBall.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sample.py" beforeDir="false" afterPath="$PROJECT_DIR$/sample.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,13 +122,66 @@
       <option name="project" value="LOCAL" />
       <updated>1791067403672</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="now timmy can decide">
+      <option name="closed" value="true" />
+      <created>1791074086125</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1791074086125</updated>
+    </task>
+    <task id="LOCAL-00005" summary="now timmy can decide">
+      <option name="closed" value="true" />
+      <created>1791074105732</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1791074105732</updated>
+    </task>
+    <task id="LOCAL-00006" summary="lil fix">
+      <option name="closed" value="true" />
+      <created>1791111105813</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1791111105813</updated>
+    </task>
+    <task id="LOCAL-00007" summary="memory">
+      <option name="closed" value="true" />
+      <created>1791146772256</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1791146772256</updated>
+    </task>
+    <task id="LOCAL-00008" summary="renaming">
+      <option name="closed" value="true" />
+      <created>1791147614283</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1791147614283</updated>
+    </task>
+    <task id="LOCAL-00009" summary="even smarter">
+      <option name="closed" value="true" />
+      <created>1791148084071</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1791148084071</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
     <MESSAGE value="it is learning I guess" />
     <MESSAGE value="better jacob" />
-    <option name="LAST_COMMIT_MESSAGE" value="better jacob" />
+    <MESSAGE value="now timmy can decide" />
+    <MESSAGE value="lil fix" />
+    <MESSAGE value="memory" />
+    <MESSAGE value="renaming" />
+    <MESSAGE value="even smarter" />
+    <option name="LAST_COMMIT_MESSAGE" value="even smarter" />
   </component>
 </project>
